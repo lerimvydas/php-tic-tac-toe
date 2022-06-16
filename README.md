@@ -8,5 +8,5 @@
 3. Install Composer dependencies by running ```docker-compose exec web composer install```
 4. Install npm dependencies by running ```docker-compose exec web npm install```
 5. Build the frontend by running ```docker-compose exec web npm run build```
-6. Start the game server by running ```docker-compose exec web -d symfony console SocketServer```
+6. Start the game server by running ```docker-compose exec -d web symfony console SocketServer```
 7. Start playing the game (http://localhost:8080/)
