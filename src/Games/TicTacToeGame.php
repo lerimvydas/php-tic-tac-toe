@@ -91,7 +91,7 @@ class TicTacToeGame extends Game
         $this->board[$default[0]][$default[1]] = 'O';
     }
 
-    public function onOpen(ConnectionInterface $conn)
+    public function onOpen(ConnectionInterface $conn):void
     {
         echo "New connection! ({$conn->resourceId})\n";
 
@@ -105,7 +105,7 @@ class TicTacToeGame extends Game
         }
     }
 
-    private function decorateWinningBoard(array $winningCombination)
+    private function decorateWinningBoard(array $winningCombination):void
     {
         [$x, $y, $z] = $winningCombination;
         $this->board[$x[0]][$x[1]] = "<div style=\"background-color:green;\">" . $this->board[$x[0]][$x[1]] . "</div>";
@@ -166,7 +166,7 @@ class TicTacToeGame extends Game
 
     public function onClose(ConnectionInterface $conn): void
     {
-        echo "Bye!";
+        echo "Bye!\n";
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e): void
