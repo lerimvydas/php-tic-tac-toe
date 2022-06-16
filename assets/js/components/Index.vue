@@ -1,6 +1,28 @@
 
 <template>
-  <button @click="sendMessage()"></button>
+  <div class="container" style="margin-top: 50px">
+    <div class="row">
+      <div class="col-md-2">
+        <button @click="newGame()" type="button" class="btn btn-success">
+          New game
+        </button>
+      </div>
+      <div class="col-md-10">
+        <h1>{{ state }}</h1>
+      </div>
+    </div>
+
+    <div class="row" v-for="(row, rowKey) in board" v-bind:key="row">
+      <div
+        class="col-sm box"
+        v-for="(column, columnKey) in row"
+        v-bind:key="column"
+        @click="place(rowKey, columnKey)"
+      >
+        <div v-html="column"></div>
+      </div>
+    </div>
+  </div>
 </template>
 
 
@@ -8,23 +30,33 @@
 export default {
   data() {
     return {
-      count: 0,
       webSocket: null,
+      board: [],
+      state: "",
     };
   },
   methods: {
-    sendMessage(){
-      this.webSocket.send("Here's some text that the server is urgently awaiting!");
+    newGame() {
+      this.webSocket.send(JSON.stringify({ action: "new_game" }));
+    },
+    place(rowKey, columnKey) {
+      this.webSocket.send(
+        JSON.stringify({ action: "place", rowKey, columnKey })
+      );
     },
     onOpen(event) {
-      console.log("opened", event);
+      this.onMessage(event);
     },
     onMessage(event) {
-      console.log(event.data);
+      if (!event.data) return;
+
+      const { board, state } = JSON.parse(event.data);
+
+      this.board = board;
+      this.state = state;
     },
   },
   mounted() {
-
     this.webSocket = new WebSocket("ws://localhost:10000");
 
     this.webSocket.onopen = this.onOpen;
